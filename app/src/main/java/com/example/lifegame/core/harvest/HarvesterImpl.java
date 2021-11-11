@@ -15,15 +15,18 @@ public class HarvesterImpl implements Harvester {
 
     @Override
     public boolean[][] getNewEra(boolean[][] map) {
-        lastHarvestEra = Instant.now();
         isHarvest = true;
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 boolean[] neighbors = findNeighbors(map, x, y);
                 int livingCount = findLivingCount(neighbors);
-
+                if (livingCount == 3)
+                    map[x][y] = true;
+                if (livingCount < 2 || livingCount > 3)
+                    map[x][y] = false;
             }
         }
+        lastHarvestEra = Instant.now();
         isHarvest = false;
         return map;
     }
@@ -51,7 +54,6 @@ public class HarvesterImpl implements Harvester {
         boolean wentRight = length < y + 1;
 
         if (wentTop && wentLeft) {
-            map[length][length] = true;
             neighbors[0] = map[length][length];
             neighbors[1] = findLeft(map, x + 1, y);
             neighbors[2] = findTop(map, x, y + 1);
@@ -59,7 +61,6 @@ public class HarvesterImpl implements Harvester {
             return neighbors;
         }
         if (wentDown && wentLeft) {
-            map[0][length] = true;
             neighbors[0] = findBottom(map, x, y + 1);
             neighbors[1] = findLeft(map, x - 1, y);
             neighbors[2] = findTop(map, x, y + 1);
@@ -67,7 +68,6 @@ public class HarvesterImpl implements Harvester {
             return neighbors;
         }
         if (wentDown && wentRight) {
-            map[0][0] = true;
             neighbors[1] = findLeft(map, x - 1, y);
             neighbors[2] = findRight(map, x - 1, y);
             neighbors[3] = findBottom(map, x, y - 1);
@@ -75,7 +75,6 @@ public class HarvesterImpl implements Harvester {
             return neighbors;
         }
         if (wentTop && wentRight) {
-            map[length][0] = true;
             neighbors[1] = findTop(map, x, y - 1);
             neighbors[2] = map[length][0];
             neighbors[3] = findBottom(map, x, y - 1);
@@ -102,10 +101,8 @@ public class HarvesterImpl implements Harvester {
         boolean bottom;
         try {
             bottom = map[++x][y];
-            map[x][y] = true;
         } catch (IndexOutOfBoundsException e) {
             bottom = map[0][y];
-            map[0][y] = true;
         }
         return bottom;
     }
@@ -114,10 +111,8 @@ public class HarvesterImpl implements Harvester {
         boolean top;
         try {
             top = map[--x][y];
-            map[x][y] = true;
         } catch (IndexOutOfBoundsException e) {
             top = map[map.length - 1][y];
-            map[map.length - 1][y] = true;
         }
         return top;
     }
@@ -126,10 +121,8 @@ public class HarvesterImpl implements Harvester {
         boolean right;
         try {
             right = map[x][++y];
-            map[x][y] = true;
         } catch (IndexOutOfBoundsException e) {
             right = map[x][0];
-            map[x][0] = true;
         }
         return right;
     }
@@ -138,10 +131,8 @@ public class HarvesterImpl implements Harvester {
         boolean left;
         try {
             left = map[x][--y];
-            map[x][y] = true;
         } catch (IndexOutOfBoundsException e) {
             left = map[x][map[0].length - 1];
-            map[x][map[0].length - 1] = true;
         }
         return left;
     }
