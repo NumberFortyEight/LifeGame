@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.example.lifegame.core.harvest.Harvester;
+import com.example.lifegame.core.harvest.HarvesterImpl;
 import com.example.lifegame.core.map.Dot;
 import com.example.lifegame.core.map.MapCreator;
 import com.example.lifegame.core.map.MapCreatorImpl;
@@ -19,6 +21,7 @@ public class ExampleUnitTest {
 
     private final Seer seer = new SeerImpl();
     private final MapCreator mapCreator = new MapCreatorImpl();
+    private final HarvesterImpl harvester = new HarvesterImpl();
 
     @Test
     public void printTest() {
@@ -35,7 +38,17 @@ public class ExampleUnitTest {
 
     @Test
     public void printCreatorMap() {
-        boolean[][] map = mapCreator.generateMap(8);
+        boolean[][] map = mapCreator.generateMap(10);
+        System.out.println(seer.showAsString(map));
+    }
+
+    @Test
+    public void printNextEra() {
+        boolean[][] map = mapCreator.generateMap(10);
+        int x = 5, y = 9;
+        map[x][y] = true;
+        System.out.println(seer.showAsString(map));
+        harvester.findNeighbors(map, x, y);
         System.out.println(seer.showAsString(map));
     }
 
