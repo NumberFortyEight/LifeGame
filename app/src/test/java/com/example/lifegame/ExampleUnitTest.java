@@ -40,11 +40,11 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void neighborsAlwaysFound() throws InterruptedException {
+    public void neighborsAlwaysFound(){
         for (int i = 0; i < 1000; i++) {
-            boolean[][] map = mapCreator.generateMap(10);
-            int x = (int) (Math.random() * 10);
-            int y = (int) (Math.random() * 10);
+            boolean[][] map = mapCreator.generateMap(15);
+            int x = (int) (Math.random() * 15);
+            int y = (int) (Math.random() * 15);
             map[x][y] = true;
             harvester.findNeighbors(map, x, y);
             System.out.println(seer.showAsString(map));
