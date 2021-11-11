@@ -1,12 +1,9 @@
 package com.example.lifegame;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import com.example.lifegame.core.harvest.Harvester;
 import com.example.lifegame.core.harvest.HarvesterImpl;
-import com.example.lifegame.core.map.Dot;
 import com.example.lifegame.core.map.MapCreator;
 import com.example.lifegame.core.map.MapCreatorImpl;
 import com.example.lifegame.core.seer.Seer;
@@ -43,13 +40,27 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void printNextEra() {
-        boolean[][] map = mapCreator.generateMap(10);
-        int x = 5, y = 9;
-        map[x][y] = true;
-        System.out.println(seer.showAsString(map));
-        harvester.findNeighbors(map, x, y);
-        System.out.println(seer.showAsString(map));
+    public void neighborsAlwaysFound() throws InterruptedException {
+        for (int i = 0; i < 1000; i++) {
+            boolean[][] map = mapCreator.generateMap(10);
+            int x = (int) (Math.random() * 10);
+            int y = (int) (Math.random() * 10);
+            map[x][y] = true;
+            harvester.findNeighbors(map, x, y);
+            System.out.println(seer.showAsString(map));
+            int neighbors = calculateNeighbors(map);
+            Assert.assertEquals(neighbors, 9);
+        }
+    }
+
+    private int calculateNeighbors(boolean[][] map) {
+        int count = 0;
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                if (map[x][y]) ++count;
+            }
+        }
+        return count;
     }
 
 }

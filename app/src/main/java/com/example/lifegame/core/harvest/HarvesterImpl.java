@@ -37,75 +37,65 @@ public class HarvesterImpl implements Harvester {
         return counter;
     }
 
-    //remove public
-    public boolean[] findNeighbors(boolean[][] map, int x, int y) {
+    public boolean[] findNeighbors(boolean[][] map, final int x, final int y) {
         boolean[] neighbors = new boolean[8];
-        neighbors[0] = findLeft(map, x, y);
-        neighbors[1] = findRight(map, x, y);
-        neighbors[2] = findTop(map, x, y);
-        neighbors[3] = findBottom(map, x, y);
+        neighbors[4] = findLeft(map, x, y);
+        neighbors[5] = findRight(map, x, y);
+        neighbors[6] = findTop(map, x, y);
+        neighbors[7] = findBottom(map, x, y);
 
-        findCorners(map, x, y);
-        return neighbors;
-    }
-
-    private boolean[] findCorners(boolean[][] map, final int x, final int y) {
         int length = map.length - 1;
         boolean wentTop = x - 1 < 0;
         boolean wentDown = length < x + 1;
         boolean wentLeft = y - 1 < 0;
         boolean wentRight = length < y + 1;
 
-        boolean[] corners = new boolean[4];
         if (wentTop && wentLeft) {
             map[length][length] = true;
-            corners[0] = map[length][length];
-            corners[1] = findLeft(map, x + 1, y);
-            corners[2] = findTop(map, x, y + 1);
-            corners[3] = findRight(map, x + 1, y);
-            return corners;
+            neighbors[0] = map[length][length];
+            neighbors[1] = findLeft(map, x + 1, y);
+            neighbors[2] = findTop(map, x, y + 1);
+            neighbors[3] = findRight(map, x + 1, y);
+            return neighbors;
         }
-        if (wentDown && wentLeft){
+        if (wentDown && wentLeft) {
             map[0][length] = true;
-            corners[0] = findBottom(map, x, y + 1);
-            boolean topLeft = findLeft(map, x - 1, y);
-            boolean bottomLeft = map[0][length];
-            boolean topRight = findTop(map, x, y + 1);
-            return corners;
+            neighbors[0] = findBottom(map, x, y + 1);
+            neighbors[1] = findLeft(map, x - 1, y);
+            neighbors[2] = findTop(map, x, y + 1);
+            neighbors[3] = map[0][length];
+            return neighbors;
         }
         if (wentDown && wentRight) {
             map[0][0] = true;
-            boolean topLeft = findLeft(map, x - 1, y);
-            boolean topRight = findRight(map, x - 1, y);
-            boolean bottomLeft = findBottom(map, x, y - 1);
-            corners[0] = map[0][0];
-            return corners;
+            neighbors[1] = findLeft(map, x - 1, y);
+            neighbors[2] = findRight(map, x - 1, y);
+            neighbors[3] = findBottom(map, x, y - 1);
+            neighbors[0] = map[0][0];
+            return neighbors;
         }
         if (wentTop && wentRight) {
             map[length][0] = true;
-            boolean topLeft = findTop(map, x, y - 1);
-            boolean topRight = map[length][0];
-            boolean bottomLeft = findBottom(map, x, y - 1);
-            corners[0] = findRight(map, x + 1, y);
-            return corners;
+            neighbors[1] = findTop(map, x, y - 1);
+            neighbors[2] = map[length][0];
+            neighbors[3] = findBottom(map, x, y - 1);
+            neighbors[0] = findRight(map, x + 1, y);
+            return neighbors;
         }
 
-        if (wentLeft || wentRight){
-            boolean topLeft = findLeft(map, x - 1, y);
-            boolean topRight = findRight(map, x - 1, y);
-            boolean bottomLeft = findLeft(map, x + 1, y);
-            corners[0] = findRight(map, x + 1, y);
-            return corners;
+        if (wentLeft || wentRight) {
+            neighbors[1] = findLeft(map, x - 1, y);
+            neighbors[2] = findRight(map, x - 1, y);
+            neighbors[3] = findLeft(map, x + 1, y);
+            neighbors[0] = findRight(map, x + 1, y);
+            return neighbors;
         }
 
-        if (wentTop || wentDown) {
-            boolean topLeft = findTop(map, x, y - 1);
-            boolean topRight = findTop(map, x, y + 1);
-            boolean bottomLeft = findBottom(map, x, y - 1);
-            corners[0] = findBottom(map, x, y + 1);
-            return corners;
-        }
-        return corners;
+        neighbors[1] = findTop(map, x, y - 1);
+        neighbors[2] = findTop(map, x, y + 1);
+        neighbors[3] = findBottom(map, x, y - 1);
+        neighbors[0] = findBottom(map, x, y + 1);
+        return neighbors;
     }
 
     private boolean findBottom(boolean[][] map, int x, int y) {
@@ -113,7 +103,7 @@ public class HarvesterImpl implements Harvester {
         try {
             bottom = map[++x][y];
             map[x][y] = true;
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             bottom = map[0][y];
             map[0][y] = true;
         }
@@ -125,7 +115,7 @@ public class HarvesterImpl implements Harvester {
         try {
             top = map[--x][y];
             map[x][y] = true;
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             top = map[map.length - 1][y];
             map[map.length - 1][y] = true;
         }
@@ -137,7 +127,7 @@ public class HarvesterImpl implements Harvester {
         try {
             right = map[x][++y];
             map[x][y] = true;
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             right = map[x][0];
             map[x][0] = true;
         }
@@ -149,7 +139,7 @@ public class HarvesterImpl implements Harvester {
         try {
             left = map[x][--y];
             map[x][y] = true;
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             left = map[x][map[0].length - 1];
             map[x][map[0].length - 1] = true;
         }
