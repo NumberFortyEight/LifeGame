@@ -6,7 +6,7 @@ public class SeerImpl implements Seer {
         StringBuilder sb = new StringBuilder();
         for (boolean[] booleans : map) {
             for (int j = 0; j < map[0].length; j++) {
-                sb.append(" ").append(booleans[j] ? "#" : "-").append(" ");
+                sb.append(" ").append(booleans[j] ? "*" : "-").append(" ");
             }
             sb.append("\n");
         }

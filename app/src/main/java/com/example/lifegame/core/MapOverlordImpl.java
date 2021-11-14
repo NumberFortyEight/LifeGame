@@ -47,7 +47,8 @@ public class MapOverlordImpl implements MapOverlord {
 
     @Override
     public void clear() {
-        map = null;
+        //todo
+        generateMap(map.length);
     }
 
     @Override
@@ -56,8 +57,12 @@ public class MapOverlordImpl implements MapOverlord {
     }
 
     @Override
-    public boolean[][] generateMap(int size, Dot... dots) {
-        map = mapCreator.generateMap(size, dots);
-        return map;
+    public boolean running() {
+        return !mapQuartz.isTimeStopped();
+    }
+
+    @Override
+    public void generateMap(int size, Dot... dots) {
+        map = mapCreator.generateRandomMap(size);
     }
 }

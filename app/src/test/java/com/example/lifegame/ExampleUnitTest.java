@@ -32,13 +32,13 @@ public class ExampleUnitTest {
         System.out.println(seer.showAsString(map));
     }
 
-    @Test
+    //@Test
     public void printCreatorMap() {
         boolean[][] map = mapCreator.generateMap(10);
         System.out.println(seer.showAsString(map));
     }
 
-    @Test
+    //@Test
     public void neighborsAlwaysFound() throws InterruptedException {
         boolean[][] map = mapCreator.generateRandomMap(15);
         for (int i = 0; i < 1000; i++) {

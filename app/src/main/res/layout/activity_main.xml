@@ -1,18 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_30"
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/map"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/hz"
+        android:layout_marginBottom="25sp"
+
+
+        android:autoSizeTextType="uniform"
+        android:includeFontPadding="false"
+        android:letterSpacing="-0.01"
+
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/hz"
+
+        android:layout_above="@id/mapSize"
+        android:layout_alignEnd="@id/run"
+        android:layout_alignStart="@id/defaultMap"
+
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+
+        android:textColor="@color/grey_90"
+        android:textColorHint="@color/grey_60"
+        android:backgroundTint="@color/grey_60"
+
+        android:inputType="number"
+        android:hint="@string/hz"/>
+
+    <EditText
+        android:id="@+id/mapSize"
+
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+
+        android:layout_above="@id/defaultMap"
+        android:layout_alignEnd="@id/run"
+        android:layout_alignStart="@id/defaultMap"
+
+        android:backgroundTint="@color/grey_60"
+        android:hint="@string/map_size"
+        android:inputType="number"
+
+        android:textColor="@color/grey_90"
+        android:textColorHint="@color/grey_60" />
+
+    <Button
+        android:id="@+id/setup"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:layout_above="@id/step"
+        android:layout_alignEnd="@id/step"
+        android:text="@string/setup" >
+    </Button>
+
+    <Button
+        android:id="@+id/step"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:layout_above="@id/stop"
+        android:layout_alignEnd="@id/stop"
+        android:text="step" >
+    </Button>
+
+    <Button
+        android:id="@+id/defaultMap"
+        android:layout_toStartOf="@id/run"
+        android:layout_alignBottom="@id/run"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:text="default" >
+    </Button>
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_toEndOf="@id/run"
+        android:layout_alignBottom="@id/run"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:text="STOP" >
+    </Button>
+
+    <Button
+        android:id="@+id/run"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="10sp"
+        android:layout_marginLeft="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:text="RUN" >
+    </Button>
+
+
+</RelativeLayout>
+

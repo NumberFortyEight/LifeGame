@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LifeGame</string>
+    <string name="hz">Refresh rate</string>
+    <string name="setup">Setup</string>
+    <string name="map_size">Map size</string>
+
 </resources>
