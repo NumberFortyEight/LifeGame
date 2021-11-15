@@ -12,7 +12,7 @@ import java.time.Instant;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MapQuartzImpl implements MapQuartz {
 
-    private Duration duration = Duration.ofMillis(100);
+    private Duration duration = Duration.ofMillis(200);
     private final Harvester harvester;
     private boolean isTimeStopped;
 

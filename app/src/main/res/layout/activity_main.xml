@@ -6,7 +6,7 @@
     android:background="@color/grey_30"
     tools:context=".MainActivity">
 
-    <TextView
+    <SurfaceView
         android:id="@+id/map"
 
         android:layout_width="match_parent"
@@ -14,14 +14,8 @@
         android:layout_above="@id/hz"
         android:layout_marginBottom="25sp"
 
-
-        android:autoSizeTextType="uniform"
-        android:includeFontPadding="false"
-        android:letterSpacing="-0.01"
-
         android:textAlignment="center"
-        android:textColor="@color/white"
-        tools:targetApi="o" />
+        android:textColor="@color/white" />
 
     <EditText
         android:id="@+id/hz"

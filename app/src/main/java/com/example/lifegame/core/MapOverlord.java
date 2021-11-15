@@ -8,6 +8,7 @@ public interface MapOverlord {
     void generateMap(int size, Dot... dots);
     boolean[][] getCurrentMap();
     void setMillis(Long millis);
+    boolean isHarvestTime();
     boolean running();
     void run();
     void stop();

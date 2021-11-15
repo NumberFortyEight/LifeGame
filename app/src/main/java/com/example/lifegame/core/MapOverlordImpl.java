@@ -57,6 +57,11 @@ public class MapOverlordImpl implements MapOverlord {
     }
 
     @Override
+    public boolean isHarvestTime() {
+        return mapQuartz.isHarvestTime();
+    }
+
+    @Override
     public boolean running() {
         return !mapQuartz.isTimeStopped();
     }

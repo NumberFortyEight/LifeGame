@@ -1,32 +1,28 @@
 package com.example.lifegame;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lifegame.core.MapOverlord;
 import com.example.lifegame.core.MapOverlordImpl;
 import com.example.lifegame.core.seer.Seer;
 import com.example.lifegame.core.seer.SeerImpl;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.example.lifegame.view.MapRenderEngine;
 
 import lombok.SneakyThrows;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity {
 
-    private final Seer seer = new SeerImpl();
+    private MapRenderEngine mapRenderEngine;
     private final MapOverlord mapOverlord = new MapOverlordImpl();
-    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     private static final int DEFAULT_MAP_SIZE = 25;
     private static final long DEFAULT_REFRESH_RATE = 25L;
@@ -35,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private Button step;
     private Button stop;
     private EditText hz;
-    private TextView map;
     private Button setup;
+    private SurfaceView map;
     private EditText mapSize;
     private Button defaultMap;
 
@@ -45,66 +41,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        map = findViewById(R.id.map);
-        hz = findViewById(R.id.hz);
+        defaultMap = findViewById(R.id.defaultMap);
         mapSize = findViewById(R.id.mapSize);
         setup = findViewById(R.id.setup);
-        run = findViewById(R.id.run);
         stop = findViewById(R.id.stop);
-        defaultMap = findViewById(R.id.defaultMap);
         step = findViewById(R.id.step);
+        map = findViewById(R.id.map);
+        run = findViewById(R.id.run);
+        hz = findViewById(R.id.hz);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        hz.setText(String.valueOf(DEFAULT_REFRESH_RATE));
         mapSize.setText(String.valueOf(DEFAULT_MAP_SIZE));
-
-        setup.setOnClickListener(v -> {
-            Editable refresh = hz.getText();
-            if (refresh != null && !refresh.toString().isEmpty()) {
-                long refreshRate = Long.parseLong(refresh.toString());
-                if (refreshRate > 15 && refreshRate < 200) {
-                    mapOverlord.setMillis(refreshRate);
-                }
-            } else mapOverlord.setMillis(DEFAULT_REFRESH_RATE);
-
-            Editable size = mapSize.getText();
-            if (size != null && !size.toString().isEmpty()) {
-                int mapSize = Integer.parseInt(size.toString());
-                if (mapSize > 5 && mapSize < 100) {
-                    mapOverlord.generateMap(mapSize);
-                }
-            } else mapOverlord.generateMap(DEFAULT_MAP_SIZE);
-            renderMap();
-        });
-
-        stop.setOnClickListener(v -> {
-            executor.shutdown();
-            mapOverlord.stop();
-        });
-
-        defaultMap.setOnClickListener(v -> {
-            mapOverlord.clear();
-            renderMap();
-        });
-        run.setOnClickListener(v -> mapOverlord.run());
-        run.setOnClickListener(v -> runMap());
-        step.setOnClickListener(v -> renderMap());
+        hz.setText(String.valueOf(DEFAULT_REFRESH_RATE));
+        setup.setOnClickListener(v -> applySettings());
+        mapOverlord.generateMap(40);
+        mapRenderEngine = new MapRenderEngine(map, mapOverlord);
     }
 
-    private void renderMap() {
-        runOnUiThread(() -> map.setText(getMapAsString()));
-    }
+    private void applySettings(){
+        Editable refresh = hz.getText();
+        if (refresh != null && !refresh.toString().isEmpty()) {
+            long refreshRate = Long.parseLong(refresh.toString());
+            if (refreshRate > 15 && refreshRate < 200) {
+                mapOverlord.setMillis(refreshRate);
+            }
+        } else mapOverlord.setMillis(DEFAULT_REFRESH_RATE);
 
-    private void runMap(){
-        mapOverlord.run();
-        if (executor.isShutdown()) executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> map.setText(getMapAsString()), 0, DEFAULT_REFRESH_RATE, TimeUnit.MICROSECONDS);
-    }
-
-    private String getMapAsString() {
-        return seer.showAsString(mapOverlord.getCurrentMap());
+        Editable size = mapSize.getText();
+        if (size != null && !size.toString().isEmpty()) {
+            int mapSize = Integer.parseInt(size.toString());
+            if (mapSize > 5 && mapSize < 100) {
+                mapOverlord.generateMap(mapSize);
+            }
+        } else mapOverlord.generateMap(DEFAULT_MAP_SIZE);
     }
 }
