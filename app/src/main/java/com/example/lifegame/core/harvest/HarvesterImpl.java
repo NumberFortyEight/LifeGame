@@ -16,19 +16,20 @@ public class HarvesterImpl implements Harvester {
     @Override
     public boolean[][] getNewEra(boolean[][] map) {
         isHarvest = true;
+        boolean[][] nextEra = new boolean[map.length][map[0].length];
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 boolean[] neighbors = findNeighbors(map, x, y);
                 int livingCount = findLivingCount(neighbors);
                 if (livingCount == 3)
-                    map[x][y] = true;
+                    nextEra[x][y] = true;
                 if (livingCount < 2 || livingCount > 3)
-                    map[x][y] = false;
+                    nextEra[x][y] = false;
             }
         }
         lastHarvestEra = Instant.now();
         isHarvest = false;
-        return map;
+        return nextEra;
     }
 
     private int findLivingCount(boolean[] neighbors) {
