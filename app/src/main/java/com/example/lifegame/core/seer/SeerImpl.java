@@ -3,6 +3,7 @@ package com.example.lifegame.core.seer;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.SurfaceHolder;
 
 public class SeerImpl implements Seer {
 
@@ -23,21 +24,21 @@ public class SeerImpl implements Seer {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(20);
-        long deviationY = 0;
+        final int deviation = canvas.getWidth() / map.length - 1;
+        paint.setStrokeWidth(deviation);
+        long deviationY = deviation;
         for (int i = 0; i < map.length; i++) {
-            long deviationX = 0;
+            long deviationX = deviation;
             for (int j = 0; j < map[0].length; j++) {
                 if (!map[i][j]) {
                     paint.setColor(Color.BLACK);
                 }
                 long x = deviationX;
-                long y = deviationY;
-                deviationX += 20;
-                canvas.drawPoint(x, y, paint);
+                deviationX += deviation;
+                canvas.drawPoint(x, deviationY, paint);
                 paint.setColor(Color.WHITE);
             }
-            deviationY +=20;
+            deviationY += deviation;
         }
     }
 }

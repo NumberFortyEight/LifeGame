@@ -19,7 +19,7 @@ public class MapCreatorImpl implements MapCreator {
     public boolean[][] generateRandomMap(int size) {
         boolean[][] map = new boolean[size][size];
         Random random = new Random();
-        for (int i = 0; i < size * 2.4; i++) {
+        for (int i = 0; i < size * 4.5; i++) {
             map[random.nextInt(size)][random.nextInt(size)] = true;
         }
         return map;

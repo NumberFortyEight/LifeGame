@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mapSize.setText(String.valueOf(DEFAULT_MAP_SIZE));
         hz.setText(String.valueOf(DEFAULT_REFRESH_RATE));
         setup.setOnClickListener(v -> applySettings());
-        mapOverlord.generateMap(40);
+        mapOverlord.generateMap(25);
         mapRenderEngine = new MapRenderEngine(map, mapOverlord);
     }
 
