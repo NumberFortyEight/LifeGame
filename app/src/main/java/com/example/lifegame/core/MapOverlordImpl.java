@@ -15,6 +15,7 @@ import com.example.lifegame.core.map.MapQuartzImpl;
 public class MapOverlordImpl implements MapOverlord {
 
     private boolean[][] map;
+    private boolean destroyed;
 
     private final MapCreator mapCreator;
     private final MapQuartz mapQuartz;
@@ -43,6 +44,16 @@ public class MapOverlordImpl implements MapOverlord {
     @Override
     public void stop() {
         mapQuartz.stop();
+    }
+
+    @Override
+    public void destroy() {
+        destroyed = true;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return false;
     }
 
     @Override

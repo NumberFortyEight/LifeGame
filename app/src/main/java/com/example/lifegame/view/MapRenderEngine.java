@@ -4,8 +4,10 @@ package com.example.lifegame.view;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -25,7 +27,7 @@ public class MapRenderEngine {
         @SneakyThrows
         @Override
         public void run() {
-            while (mapOverlord.running()){
+            while (!mapOverlord.isDestroyed()){
                 if (!mapOverlord.isHarvestTime())
                     continue;
 
@@ -46,7 +48,6 @@ public class MapRenderEngine {
         this.mapOverlord = mapOverlord;
         Thread thread = new Thread(runnable, "map_thread");
         thread.start();
-
         SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(@NonNull SurfaceHolder holder) {

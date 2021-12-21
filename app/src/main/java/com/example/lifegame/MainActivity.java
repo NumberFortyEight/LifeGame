@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,19 +17,24 @@ import com.example.lifegame.core.seer.Seer;
 import com.example.lifegame.core.seer.SeerImpl;
 import com.example.lifegame.view.MapRenderEngine;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.SneakyThrows;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity {
 
-    private MapRenderEngine mapRenderEngine;
     private final MapOverlord mapOverlord = new MapOverlordImpl();
 
     private static final int DEFAULT_MAP_SIZE = 25;
+    private static final int MAX_MAP_SIZE = 100;
+    private static final int MIN_MAP_SIZE = 10;
+
     private static final long DEFAULT_REFRESH_RATE = 25L;
+    private static final long MAX_REFRESH_RATE = 400L;
+    private static final long MIN_REFRESH_RATE = 25L;
 
     private Button run;
-    private Button step;
     private Button stop;
     private EditText hz;
     private Button setup;
@@ -45,37 +51,48 @@ public class MainActivity extends AppCompatActivity {
         mapSize = findViewById(R.id.mapSize);
         setup = findViewById(R.id.setup);
         stop = findViewById(R.id.stop);
-        step = findViewById(R.id.step);
         map = findViewById(R.id.map);
         run = findViewById(R.id.run);
         hz = findViewById(R.id.hz);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         mapSize.setText(String.valueOf(DEFAULT_MAP_SIZE));
         hz.setText(String.valueOf(DEFAULT_REFRESH_RATE));
-        setup.setOnClickListener(v -> applySettings());
+        setup.setOnClickListener(view -> applySettings());
         mapOverlord.generateMap(25);
-        mapRenderEngine = new MapRenderEngine(map, mapOverlord);
+        mapOverlord.stop();
+        new MapRenderEngine(map, mapOverlord);
+
+        defaultMap.setOnClickListener(view -> mapOverlord.generateMap(DEFAULT_MAP_SIZE));
+        stop.setOnClickListener(view -> mapOverlord.stop());
+        run.setOnClickListener(view -> mapOverlord.run());
     }
 
     private void applySettings(){
-        Editable refresh = hz.getText();
-        if (refresh != null && !refresh.toString().isEmpty()) {
-            long refreshRate = Long.parseLong(refresh.toString());
-            if (refreshRate > 15 && refreshRate < 200) {
-                mapOverlord.setMillis(refreshRate);
-            }
-        } else mapOverlord.setMillis(DEFAULT_REFRESH_RATE);
+        String refresh = checkSettings(hz.getText());
+        String size = checkSettings(mapSize.getText());
 
-        Editable size = mapSize.getText();
-        if (size != null && !size.toString().isEmpty()) {
-            int mapSize = Integer.parseInt(size.toString());
-            if (mapSize > 5 && mapSize < 100) {
-                mapOverlord.generateMap(mapSize);
-            }
-        } else mapOverlord.generateMap(DEFAULT_MAP_SIZE);
+        long refreshRate = Long.parseLong(refresh);
+        if (refreshRate >= MIN_REFRESH_RATE && refreshRate <= MAX_REFRESH_RATE) {
+            mapOverlord.setMillis(refreshRate);
+        } else {
+            Toast.makeText(MainActivity.this, "Refresh data could be in (15 - 200)", Toast.LENGTH_SHORT).show();
+            mapOverlord.setMillis(DEFAULT_REFRESH_RATE);
+        }
+
+        int mapSize = Integer.parseInt(size);
+        if (mapSize >= MIN_MAP_SIZE && mapSize <= MAX_MAP_SIZE) {
+            mapOverlord.generateMap(mapSize);
+        } else {
+            Toast.makeText(MainActivity.this, "Map size could be in (5 - 100)", Toast.LENGTH_SHORT).show();
+            mapOverlord.generateMap(DEFAULT_MAP_SIZE);
+        }
+    }
+
+    private String checkSettings(CharSequence sequence){
+        if (StringUtils.isEmpty(sequence)) {
+            Toast.makeText(MainActivity.this, "Fill in the fields", Toast.LENGTH_SHORT).show();
+            throw new IllegalStateException();
+        }
+        return sequence.toString();
     }
 }

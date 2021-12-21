@@ -55,18 +55,9 @@
         android:id="@+id/setup"
         android:layout_width="wrap_content"
         android:layout_height="60sp"
-        android:layout_above="@id/step"
-        android:layout_alignEnd="@id/step"
-        android:text="@string/setup" >
-    </Button>
-
-    <Button
-        android:id="@+id/step"
-        android:layout_width="wrap_content"
-        android:layout_height="60sp"
         android:layout_above="@id/stop"
         android:layout_alignEnd="@id/stop"
-        android:text="step" >
+        android:text="@string/setup" >
     </Button>
 
     <Button

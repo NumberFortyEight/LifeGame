@@ -12,5 +12,7 @@ public interface MapOverlord {
     boolean running();
     void run();
     void stop();
+    void destroy();
+    boolean isDestroyed();
     void clear();
 }
