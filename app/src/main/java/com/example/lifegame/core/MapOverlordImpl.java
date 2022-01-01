@@ -16,6 +16,7 @@ public class MapOverlordImpl implements MapOverlord {
 
     private boolean[][] map;
     private boolean destroyed;
+    private boolean isChanged;
 
     private final MapCreator mapCreator;
     private final MapQuartz mapQuartz;
@@ -34,6 +35,24 @@ public class MapOverlordImpl implements MapOverlord {
             return map;
         map = harvester.getNewEra(map);
         return map;
+    }
+
+    @Override
+    public void createLife(int x, int y) {
+        try {
+            map[y][x] = true;
+            isChanged = true;
+        } catch (Exception ignored){}
+    }
+
+    @Override
+    public boolean isChanged() {
+        return isChanged || running();
+    }
+
+    @Override
+    public void setChanged(boolean isChanged) {
+        this.isChanged = isChanged;
     }
 
     @Override
@@ -79,6 +98,7 @@ public class MapOverlordImpl implements MapOverlord {
 
     @Override
     public void generateMap(int size, Dot... dots) {
-        map = mapCreator.generateRandomMap(size);
+        map = new boolean[size][size];
+        //map = mapCreator.generateRandomMap(size);
     }
 }

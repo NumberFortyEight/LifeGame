@@ -7,6 +7,9 @@ import com.example.lifegame.core.map.MapQuartz;
 public interface MapOverlord {
     void generateMap(int size, Dot... dots);
     boolean[][] getCurrentMap();
+    void createLife(int x, int y);
+    boolean isChanged();
+    void setChanged(boolean isChanged);
     void setMillis(Long millis);
     boolean isHarvestTime();
     boolean running();

@@ -2,7 +2,6 @@ package com.example.lifegame;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lifegame.core.MapOverlord;
 import com.example.lifegame.core.MapOverlordImpl;
-import com.example.lifegame.core.seer.Seer;
-import com.example.lifegame.core.seer.SeerImpl;
 import com.example.lifegame.view.MapRenderEngine;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +21,10 @@ import lombok.SneakyThrows;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity {
 
-    private final MapOverlord mapOverlord = new MapOverlordImpl();
+    public static final MapOverlord mapOverlord = new MapOverlordImpl();
 
     private static final int DEFAULT_MAP_SIZE = 25;
-    private static final int MAX_MAP_SIZE = 100;
+    private static final int MAX_MAP_SIZE = 45;
     private static final int MIN_MAP_SIZE = 10;
 
     private static final long DEFAULT_REFRESH_RATE = 25L;
@@ -62,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
         mapOverlord.stop();
         new MapRenderEngine(map, mapOverlord);
 
-        defaultMap.setOnClickListener(view -> mapOverlord.generateMap(DEFAULT_MAP_SIZE));
+        defaultMap.setOnClickListener(view -> cleanMap());
         stop.setOnClickListener(view -> mapOverlord.stop());
         run.setOnClickListener(view -> mapOverlord.run());
     }
 
     private void applySettings(){
+        cleanMap();
         String refresh = checkSettings(hz.getText());
         String size = checkSettings(mapSize.getText());
 
@@ -83,9 +81,18 @@ public class MainActivity extends AppCompatActivity {
         if (mapSize >= MIN_MAP_SIZE && mapSize <= MAX_MAP_SIZE) {
             mapOverlord.generateMap(mapSize);
         } else {
-            Toast.makeText(MainActivity.this, "Map size could be in (5 - 100)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Map size could be in (5 - 45)", Toast.LENGTH_SHORT).show();
             mapOverlord.generateMap(DEFAULT_MAP_SIZE);
         }
+    }
+
+    private void cleanMap(){
+        mapOverlord.generateMap(DEFAULT_MAP_SIZE);
+        mapOverlord.run();
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException ignored) {}
+        mapOverlord.stop();
     }
 
     private String checkSettings(CharSequence sequence){
